@@ -1,44 +1,22 @@
-import {useRef, useState} from "react";
 import clsx from "clsx";
 import {Button} from "../../ui/Button";
-import {axis2D, fillArray, pointToString} from "../../lib/utils";
+import {pointToString} from "../../lib/utils";
 import {
-    CalendarMonthTable,
-    CalendarBuilder,
     CalendarCell,
 } from "../../lib/CalendarBuilder";
-import {MonthCalendar} from "../../lib/Calendar";
 import React from "react";
 import {Cell} from "./Cell";
 import {Grid} from "./Grid";
+import {useCalendar} from "./hooks/useCalendar";
 
 interface CalendarProps {
     children?: (props: CalendarCell) => React.ReactNode;
 }
 
 export function Calendar({children}: CalendarProps) {
-    const instance = useRef<MonthCalendar>(new MonthCalendar());
-
-    const rebuildCalendar = () => {
-        const builder = new CalendarBuilder(instance.current);
-        return builder.getMonthTable();
-    };
-
-    const [calendar, setCurrent] = useState<CalendarMonthTable>(rebuildCalendar);
-
-    const nextMonth = () => {
-        instance.current.next();
-        setCurrent(rebuildCalendar());
-    };
-
-    const prevMonth = () => {
-        instance.current.prev();
-        setCurrent(rebuildCalendar());
-    };
-
     const isHeader = (x: number, y: number) => x === 0 || y === 0;
 
-    const cells: string[] = fillArray(calendar.width * calendar.height, "");
+    const [calendar, {prevMonth, nextMonth}] = useCalendar();
 
     return (
         <section className="calendar">
