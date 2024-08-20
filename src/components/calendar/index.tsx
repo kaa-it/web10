@@ -1,7 +1,7 @@
 import {useRef, useState} from "react";
 import clsx from "clsx";
 import {Button} from "../../ui/Button";
-import {axis2D, fillArray, pointToString} from "../../lib/utils";
+import {pointToString} from "../../lib/utils";
 import {
     CalendarMonthTable,
     CalendarBuilder,
@@ -37,8 +37,6 @@ export function Calendar({children}: CalendarProps) {
     };
 
     const isHeader = (x: number, y: number) => x === 0 || y === 0;
-
-    const cells: string[] = fillArray(calendar.width * calendar.height, "");
 
     return (
         <section className="calendar">
