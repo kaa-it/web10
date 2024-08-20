@@ -99,7 +99,7 @@ export interface FieldProps extends Styleable {
   children: React.ReactElement
 };
 
-export function isInputElement(el: unknown): el is React.ReactElement<InputProps> {
+export function isInputElement(el: any): el is React.ReactElement<InputProps> {
   return  React.isValidElement<InputProps>(el) && !!el.props.type;
 }
 
