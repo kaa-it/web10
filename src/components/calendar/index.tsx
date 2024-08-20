@@ -1,4 +1,4 @@
-import {CSSProperties, useRef, useState} from "react";
+import {useRef, useState} from "react";
 import clsx from "clsx";
 import {Button} from "../../ui/Button";
 import {axis2D, fillArray, pointToString} from "../../lib/utils";
@@ -10,11 +10,7 @@ import {
 import {MonthCalendar} from "../../lib/Calendar";
 import React from "react";
 import {Cell} from "./Cell";
-
-export interface GridCSS extends CSSProperties {
-    "--w": number;
-    "--h": number;
-}
+import {Grid} from "./Grid";
 
 interface CalendarProps {
     children?: (props: CalendarCell) => React.ReactNode;
@@ -56,32 +52,26 @@ export function Calendar({children}: CalendarProps) {
                 </Button>
             </nav>
             <div className="layers">
-                <form
+                <Grid
+                    tag="form"
+                    width={calendar.width}
+                    height={calendar.height}
                     className={clsx("layer", "base")}
-                    style={
-                        {
-                            "--w": calendar.width,
-                            "--h": calendar.height,
-                        } as GridCSS
-                    }
                 >
-                    {cells.map((_, index) => {
-                        const [x, y] = axis2D(index, calendar.width);
-                        return (
-                            <Cell
-                                tag="button"
-                                key={pointToString(x, y)}
-                                x={x}
-                                y={y}
-                                className={clsx("day", calendar.table[index].className, {header: isHeader(x, y)})}
-                            >
-                                {children && !isHeader(x, y)
-                                    ? children(calendar.table[index])
-                                    : calendar.table[index].value}
-                            </Cell>
-                        );
-                    })}
-                </form>
+                    {({x, y, index}) => (
+                        <Cell
+                            tag="button"
+                            key={pointToString(x, y)}
+                            x={x}
+                            y={y}
+                            className={clsx("day", calendar.table[index].className, {header: isHeader(x, y)})}
+                        >
+                            {children && !isHeader(x, y)
+                                ? children(calendar.table[index])
+                                : calendar.table[index].value}
+                        </Cell>
+                    )}
+                </Grid>
             </div>
         </section>
     );
